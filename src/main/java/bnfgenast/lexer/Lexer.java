@@ -41,7 +41,7 @@ public interface Lexer {
 
     Set<String> getReservedToken();
 
-    boolean hasMore();
+    boolean isHasMore();
 
-    int lineNumber();
+    int getLineNumber();
 }

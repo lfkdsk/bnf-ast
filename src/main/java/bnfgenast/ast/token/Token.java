@@ -168,10 +168,6 @@ public class Token {
         return tag;
     }
 
-    public boolean isType() {
-        return false;
-    }
-
     public boolean isBool() {
         return false;
     }

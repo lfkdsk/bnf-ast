@@ -54,6 +54,21 @@ public abstract class Factory {
         return f;
     }
 
+    public static Factory getForWrapper() {
+        return new Factory() {
+            @Override
+            protected AstNode make0(Object arg) throws Exception {
+                List<AstNode> results = (List<AstNode>) arg;
+
+                if (results.size() != 1) {
+                    throw new UnsupportedOperationException("Wrapper's child count must be 1 but not :" + results.size());
+                }
+
+                return results.get(0);
+            }
+        };
+    }
+
     /**
      * 静态构建工厂类
      *

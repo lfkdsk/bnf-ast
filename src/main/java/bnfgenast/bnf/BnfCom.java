@@ -5,6 +5,9 @@ import bnfgenast.ast.base.AstNode;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.bnf.base.Factory;
 import bnfgenast.bnf.base.Operators;
+import bnfgenast.bnf.capturer.AssertCapture;
+import bnfgenast.bnf.capturer.Capture;
+import bnfgenast.bnf.capturer.ConsumerCapture;
 import bnfgenast.bnf.leaf.Leaf;
 import bnfgenast.bnf.leaf.Skip;
 import bnfgenast.bnf.leaf.SkipOR;
@@ -17,6 +20,8 @@ import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 /**
  * BnfParser 巴克斯范式解析引擎
@@ -88,6 +93,19 @@ public class BnfCom {
      */
     public static BnfCom rule(Class<? extends AstNode> clazz) {
         return new BnfCom(clazz);
+    }
+
+    /**
+     * 产生一个 Wrapper 类，不会生成当前层，inner elements 只能有一个
+     *
+     * @return Wrapper's Inner Ast
+     */
+    public static BnfCom wrapper() {
+        BnfCom inner = rule();
+        inner.factory = Factory.getForWrapper();
+        inner.reset();
+
+        return inner;
     }
 
     public BnfCom reset() {
@@ -273,6 +291,16 @@ public class BnfCom {
 
     public BnfCom name(String name) {
         this.ruleName = name;
+        return this;
+    }
+
+    public <T extends AstNode> BnfCom consume(BnfCom bnfCom, Consumer<T> initial) {
+        elements.add(new ConsumerCapture<>(bnfCom, initial));
+        return this;
+    }
+
+    public <T extends AstNode> BnfCom predicate(BnfCom bnfCom, Predicate<T> initial) {
+        elements.add(new AssertCapture<>(bnfCom, initial));
         return this;
     }
 
