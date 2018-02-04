@@ -28,6 +28,8 @@ public class JustRegex {
      */
     public static final String variable = "[A-Z_a-z][A-Z_a-z0-9]*";
 
+    public static final String booleanReg = "==|<=|>=|!=|&&|\\|\\|";
+
     /**
      * 任意符号的正则匹配
      */
@@ -49,7 +51,7 @@ public class JustRegex {
     // Regex Define
     ///////////////////////////////////////////////////////////////////////////
 
-    public static final String hobbyUnFormat = "\\s*((?<ANNOTATION>%1$s)|(?<FLOAT>%2$s)|(?<INT>%3$s)|(?<BOOL>%4$s)|(?<STRING>%5$s)|(?<TOKEN>%6$s)|(?<SYMBOL>%7$s))?";
+    public static final String hobbyUnFormat = "\\s*((?<ANNOTATION>%1$s)|(?<FLOAT>%2$s)|(?<INT>%3$s)|(?<BOOL>%4$s)|(?<STRING>%5$s)|(?<TOKEN>%6$s)|(?<BOOLSYMBOL>%7$s)|(?<SYMBOL>%8$s))?";
 
     public static final String hobbyReg = String.format(
             hobbyUnFormat,
@@ -59,6 +61,7 @@ public class JustRegex {
             bool,
             string,
             variable,
+            booleanReg,
             symbol
     );
 }

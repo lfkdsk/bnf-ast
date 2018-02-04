@@ -257,6 +257,17 @@ public class JustLexer implements Lexer {
             return;
         }
 
+        String boolOperator = matcher.group("BOOLSYMBOL");
+
+        if (boolOperator != null) {
+            // special resolve => " " | "\t" | "\n" | "\r" => useless message
+            if (avoid.contains(boolOperator)) {
+                return;
+            }
+
+            queue.add(new SepToken(lineNum, -1, boolOperator));
+        }
+
         String symbol = matcher.group("SYMBOL");
 
         if (symbol != null) {

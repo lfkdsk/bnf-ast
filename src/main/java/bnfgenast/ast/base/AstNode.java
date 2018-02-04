@@ -39,11 +39,6 @@ public abstract class AstNode implements Iterable<AstNode> {
     @Getter
     protected int hash = 0;
 
-    @Getter
-    @Setter
-    private String target = "";
-
-
     public AstNode(int tag) {
         this.tag = tag;
     }

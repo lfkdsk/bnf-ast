@@ -264,13 +264,13 @@ public class BnfCom {
         return this;
     }
 
-    public BnfCom expression(BnfCom subExp, Operators operators) {
+    public BnfCom expr(BnfCom subExp, Operators operators) {
         elements.add(new Expr(null, subExp, operators));
         return this;
     }
 
-    public BnfCom expression(Class<? extends AstNode> clazz, BnfCom subExp,
-                             Operators operators) {
+    public BnfCom expr(Class<? extends AstNode> clazz, BnfCom subExp,
+                       Operators operators) {
         elements.add(new Expr(clazz, subExp, operators));
         return this;
     }
@@ -359,6 +359,10 @@ public class BnfCom {
         BnfCom bnfCom = wrapper(this.factory);
         bnfCom.collect(this, collection);
         return bnfCom;
+    }
+
+    public BnfCom then(BnfCom parser) {
+        return this.ast(parser);
     }
 
     @Override
