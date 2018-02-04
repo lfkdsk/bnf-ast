@@ -5,8 +5,8 @@ import bnfgenast.ast.base.AstNode;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.bnf.base.Factory;
 import bnfgenast.bnf.base.Operators;
-import bnfgenast.bnf.capturer.AssertCapture;
-import bnfgenast.bnf.capturer.Capture;
+import bnfgenast.bnf.capturer.CollectCapture;
+import bnfgenast.bnf.capturer.PredicateCapture;
 import bnfgenast.bnf.capturer.ConsumerCapture;
 import bnfgenast.bnf.leaf.Leaf;
 import bnfgenast.bnf.leaf.Skip;
@@ -101,8 +101,12 @@ public class BnfCom {
      * @return Wrapper's Inner Ast
      */
     public static BnfCom wrapper() {
+        return wrapper(null);
+    }
+
+    public static BnfCom wrapper(Factory factory) {
         BnfCom inner = rule();
-        inner.factory = Factory.getForWrapper();
+        inner.factory = Factory.getForWrapper(factory);
         inner.reset();
 
         return inner;
@@ -175,6 +179,10 @@ public class BnfCom {
         elements.add(new NullToken(clazz));
         return this;
     }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Combinator 组合子
+    ///////////////////////////////////////////////////////////////////////////
 
     /**
      * 添加非终结符
@@ -294,14 +302,63 @@ public class BnfCom {
         return this;
     }
 
+    public BnfCom times(BnfCom parser, int times) {
+        elements.add(new Times(parser, times));
+        return this;
+    }
+
+    public BnfCom most(BnfCom parser, int maxTimes) {
+        elements.add(new Times(parser, Integer.MAX_VALUE, maxTimes, Integer.MAX_VALUE));
+        return this;
+    }
+
+    public BnfCom least(BnfCom parser, int minTimes) {
+        elements.add(new Times(parser, Integer.MAX_VALUE, Integer.MAX_VALUE, minTimes));
+        return this;
+    }
+
     public <T extends AstNode> BnfCom consume(BnfCom bnfCom, Consumer<T> initial) {
         elements.add(new ConsumerCapture<>(bnfCom, initial));
         return this;
     }
 
-    public <T extends AstNode> BnfCom predicate(BnfCom bnfCom, Predicate<T> initial) {
-        elements.add(new AssertCapture<>(bnfCom, initial));
+    public <T extends AstNode> BnfCom consume(Consumer<T> initial) {
+        BnfCom bnfCom = wrapper(this.factory);
+        bnfCom.consume(this, initial);
+        return bnfCom;
+    }
+
+    public <T extends AstNode> BnfCom test(BnfCom bnfCom, Predicate<T> initial) {
+        elements.add(new PredicateCapture<>(bnfCom, initial, true));
         return this;
+    }
+
+    public <T extends AstNode> BnfCom not(BnfCom bnfCom, Predicate<T> initial) {
+        elements.add(new PredicateCapture<>(bnfCom, initial, false));
+        return this;
+    }
+
+    public <T extends AstNode> BnfCom test(Predicate<T> initial) {
+        BnfCom bnfCom = wrapper(this.factory);
+        bnfCom.test(this, initial);
+        return bnfCom;
+    }
+
+    public <T extends AstNode> BnfCom not(Predicate<T> initial) {
+        BnfCom bnfCom = wrapper(this.factory);
+        bnfCom.not(this, initial);
+        return bnfCom;
+    }
+
+    public <T extends AstNode> BnfCom collect(BnfCom parser, List<T> collection) {
+        elements.add(new CollectCapture<>(parser, collection));
+        return this;
+    }
+
+    public <T extends AstNode> BnfCom collect(List<T> collection) {
+        BnfCom bnfCom = wrapper(this.factory);
+        bnfCom.collect(this, collection);
+        return bnfCom;
     }
 
     @Override

@@ -37,4 +37,6 @@ public class PrefixTreeTest {
         Assert.assertEquals(((AstLeaf) node.child(0)).token().getText(), "lfkdsk");
         Assert.assertEquals(((AstLeaf) node.child(1)).token().getText(), "{");
     }
+
+
 }

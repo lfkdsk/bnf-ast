@@ -54,17 +54,19 @@ public abstract class Factory {
         return f;
     }
 
-    public static Factory getForWrapper() {
+    public static Factory getForWrapper(Factory factory) {
         return new Factory() {
             @Override
             protected AstNode make0(Object arg) throws Exception {
                 List<AstNode> results = (List<AstNode>) arg;
 
-                if (results.size() != 1) {
-                    throw new UnsupportedOperationException("Wrapper's child count must be 1 but not :" + results.size());
+                if (results.size() == 1) {
+                    return results.get(0);
+                } else if (results.size() > 1 && factory != null) {
+                    return factory.make(arg);
                 }
 
-                return results.get(0);
+                throw new UnsupportedOperationException("Wrapper's child count will be 1 or wrapper more" + results.size());
             }
         };
     }

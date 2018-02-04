@@ -16,6 +16,7 @@ import java.util.List;
  * 还有Option
  */
 public class Repeat extends Element {
+
     protected BnfCom parser;
 
     protected boolean onlyOne;
