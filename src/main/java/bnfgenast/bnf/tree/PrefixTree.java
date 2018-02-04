@@ -21,6 +21,7 @@ public class PrefixTree extends Element {
     public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
         Queue<BnfCom> parsers = choose(lexer);
         lexer.backup();
+
         while (parsers != null && !parsers.isEmpty()) {
             BnfCom parser = parsers.poll();
             AstNode node;

@@ -6,7 +6,7 @@
 
     <groupId>lfkdsk</groupId>
     <artifactId>bnf-ast</artifactId>
-    <version>3.0</version>
+    <version>3.02</version>
 
     <dependencies>
         <dependency>
