@@ -22,16 +22,22 @@ public class Times extends Element {
 
     private int minTimes = Integer.MIN_VALUE;
 
+    private boolean acceptType;
+
     public Times(BnfCom parser, int times) {
         this.parser = parser;
         this.acceptTimes = ObjectHelper.verifyPositive(times, "times");
         this.times = 0;
+        this.acceptType = true;
     }
 
     public Times(BnfCom parser, int acceptTimes, int maxTimes, int minTimes) {
         this(parser, acceptTimes);
         this.maxTimes = ObjectHelper.verifyPositive(maxTimes, "maxTimes");
         this.minTimes = ObjectHelper.verifyPositive(minTimes, "minTimes");
+        this.minTimes = Math.min(minTimes, maxTimes);
+        this.maxTimes = Math.max(minTimes, maxTimes);
+        this.acceptType = false;
     }
 
     @Override
@@ -58,6 +64,10 @@ public class Times extends Element {
 
         if (times > maxTimes) {
             throw new IllegalArgumentException("run times more than minTimes : (times):" + times + " (max-times):" + maxTimes);
+        }
+
+        if (acceptType && acceptTimes != 0) {
+            throw new IllegalArgumentException("run times less than accept times : (times):" + times + " (accept-times):" + acceptTimes);
         }
     }
 

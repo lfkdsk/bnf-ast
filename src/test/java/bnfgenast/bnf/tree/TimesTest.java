@@ -12,7 +12,7 @@ import static bnfgenast.bnf.BnfCom.rule;
 
 public class TimesTest {
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void testTimes() {
         BnfCom times = rule().token("lfkdsk").times(
                 rule().sep(",").token("lfkdsk"),
@@ -53,5 +53,20 @@ public class TimesTest {
 
         AstNode node = times.parse(lexer1);
         Assert.assertNotNull(node);
+    }
+
+    @Test
+    public void testRange() {
+        // 3-5
+        BnfCom times = rule().token("lfkdsk").range(
+                rule().sep(",").token("lfkdsk"),
+                3,5
+        );
+
+        Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk,lfkdsk,lfkdsk");
+
+        AstNode node = times.parse(lexer1);
+        Assert.assertNotNull(node);
+        Assert.assertEquals(5, node.childCount());
     }
 }

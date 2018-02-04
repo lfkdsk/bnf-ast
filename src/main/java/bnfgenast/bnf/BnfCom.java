@@ -317,6 +317,11 @@ public class BnfCom {
         return this;
     }
 
+    public BnfCom range(BnfCom parser, int min, int max) {
+        elements.add(new Times(parser, Integer.MAX_VALUE, max, min));
+        return this;
+    }
+
     public <T extends AstNode> BnfCom consume(BnfCom bnfCom, Consumer<T> initial) {
         elements.add(new ConsumerCapture<>(bnfCom, initial));
         return this;

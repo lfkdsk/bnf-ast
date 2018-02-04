@@ -1,5 +1,8 @@
 # EBNF-AST Generator
 
+[![](https://jitpack.io/v/lfkdsk/bnf-ast.svg)](https://jitpack.io/#lfkdsk/bnf-ast)
+
+
 *Bnf-Ast Generator* is a parser generator framework for parsing EBNF syntaxes with Java code. Unlike other EBNF-Parser must write `config file` (like yacc, flex) , with BNF-AST Generator you can define EBNF Parser in Java Code.
 
 ## Install
@@ -97,11 +100,24 @@ The list combinator corresponds to the non-leaf node in the AST.
 | maybe           | `maybe` combinator expects a Parser option that may exist. Even `maybe` don't exist, maybe will generate an empty List in AST. | [Maybe Tree](src/test/java/bnfgenast/bnf/tree/MaybeTreeTest.java) |
 | option          | `option` combinator expects a Parser option that may exist. Unlike `maybe`, if the `option` is not triggered, there is no empty node in the AST | [Option Tree](src/test/java/bnfgenast/bnf/tree/OptionTreeTest.java) |
 | repeat          | `repeat` combinator represents a Parser that matches repeatedly. | [Repeat Tree](src/test/java/bnfgenast/bnf/tree/RepeatTest.java) |
-|                 |                                          |                                          |
-|                 |                                          |                                          |
-|                 |                                          |                                          |
+| prefix          | The main function of `prefix` is similar to or, but Parser of `or` can only support Parsers with different prefixes, but `prefix` can support multiple Parsers with different prefixes. | [Prefix Tree](src/test/java/bnfgenast/bnf/tree/PrefixTreeTest.java) |
+| expr            | `expr` support binary operator expressions.(support recursive operator) | [Expr Tree](src/test/java/bnfgenast/bnf/tree/ExprTest.java) |
+| insertChoice    | The` insertChoice` combinator and `or` are used together to insert a new Parser among the alternatives of the or combinator. | [Insert Choice Tree](src/test/java/bnfgenast/bnf/tree/InsertChoiceTest.java) |
+| times           | `times` and `repeat` are closer, but times can be used to specify the number of repeated matches. If the number of matched times is not used, an exception occurs. | [Times Tree](src/test/java/bnfgenast/bnf/tree/TimesTest.java) |
+| least           | `Times`'s' sub-function, could set the minimum value of repeated matches. | [Times Tree](src/test/java/bnfgenast/bnf/tree/TimesTest.java) |
+| most            | `Times`'s' sub-function, could set the maximum value of repeated matches. | [Times Tree](src/test/java/bnfgenast/bnf/tree/TimesTest.java) |
+| range           | `Times`'s' sub-function, could set the minimum and maximum values of repeated matches. | [Times Tree](src/test/java/bnfgenast/bnf/tree/TimesTest.java) |
 
+### Capture Combinator
 
+Capture Combinator is a combination of sub-capture and monitor, we can set the monitor to achieve grammar-guided translation of some of the functions (such as testing node function, collect node data, data processing)
+
+| Combinator Name | Description                              | Usage                                    |
+| --------------- | ---------------------------------------- | ---------------------------------------- |
+| consume         | A callback can be inserted in the process of generating the BNF in the process of automatically generating the AST by the BNF. | [Consume Test](src/test/java/bnfgenast/bnf/capturer/CaptureTest.java) |
+| test            | It is possible to test the correctness of the AST node's information during the automatic generation of the AST by the BNF. | [Test Test](src/test/java/bnfgenast/bnf/capturer/AssertCaptureTest.java) |
+| not             | It is possible to test the correctness of the AST node's information during the automatic generation of the AST by the BNF. | [Not Test](src/test/java/bnfgenast/bnf/capturer/PredicateCaptureTest.java) |
+| collect         | The generated AST node can be collected during the process of automatically generating the AST node by the BNF. | [Collect Test](src/test/java/bnfgenast/bnf/capturer/CollectCaptureTest.java) |
 
 
 ## License
