@@ -1,7 +1,9 @@
 # EBNF-AST Generator
 
 [![](https://jitpack.io/v/lfkdsk/bnf-ast.svg)](https://jitpack.io/#lfkdsk/bnf-ast)
-
+![](https://travis-ci.org/lfkdsk/bnf-ast.svg?branch=master)
+[![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/lfkdsk/bnf-ast/blob/master/LICENSE)
+![](https://img.shields.io/badge/java--version-1.8%2B-blue.svg)
 
 *Bnf-Ast Generator* is a parser generator framework for parsing EBNF syntaxes with Java code. Unlike other EBNF-Parser must write `config file` (like yacc, flex) , with BNF-AST Generator you can define EBNF Parser in Java Code.
 
