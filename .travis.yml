@@ -11,7 +11,6 @@ deploy:
   provider: releases
   api_key:
     secure: gkX5DRIDVppQgVBT0quwOJH7NeGBH2VTL+UbaG88dBSsMGAbZ7L5dMr0lTs6bkk3hxIC9jQHEinNLILKTIql4CIHDDFqsPKsfzIubx3u4vlGtAH3WaLUNkXNCRhTBDa7hKnJrsMYBk+wEX/TosxYpoq0UwhnModxxCRaPoaFUsyvDxd4/2hINUPKIAHuPPzuu84M0Z50uWyFr0wgwYg+SdHnqoZvJvmH2T6qi98c9WzprlA0ztZJj8VrAzjI5AQEObleCd/ZA8U8IY3f/yJYfR5o9J6VhXxcn+5jsBY77Fe/OvZoL8/C6bBJciBidYjoZpCRnNlAF5NhpKRe0WeeRiScVbYqDrE8DYz2eqi5ILVF5o4Kvmke2pRhyOTkfGKqzhXI+S60sKYyUlZBcy6EzS2HKtIj4SVFMlGejixNouq0b8z15BTwjZTIyR0Kqfce4EZm2BP1GiNSLLxD/X8bycnXv4K2Ev10I6bPMJx6JvCYc0GFBsOnePCU9SeYvbJxt2WblT/xsLs7MTwrYFT/qi+gTXBPtS6/kfqFOqs914qtYwStfyZ7aqVQ3nUg24nEZC8etyWOSuD1Fz33fjgjpgkZP9XZuBYRTfAvi0W6RqzxEL+IVLNSftkKPwOb9RZlM4WJWnJnvV438X8IZ1hbu6+4cUCdf7aCtMfJQCmiACo=
-  file: ''
   on:
     repo: lfkdsk/bnf-ast
     all_branches: false
