@@ -20,7 +20,7 @@ public class CollectCaptureTest {
         List<AstNode> leaves = new LinkedList<>();
         BnfCom times = rule().token("lfkdsk").collect(leaves).times(
                 rule().sep(",").token("lfkdsk").collect(leaves),
-                3
+                2
         );
 
         Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk");

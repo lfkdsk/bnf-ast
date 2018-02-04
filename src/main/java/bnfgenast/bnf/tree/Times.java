@@ -35,8 +35,6 @@ public class Times extends Element {
         this(parser, acceptTimes);
         this.maxTimes = ObjectHelper.verifyPositive(maxTimes, "maxTimes");
         this.minTimes = ObjectHelper.verifyPositive(minTimes, "minTimes");
-        this.minTimes = Math.min(minTimes, maxTimes);
-        this.maxTimes = Math.max(minTimes, maxTimes);
         this.acceptType = false;
     }
 
@@ -67,7 +65,7 @@ public class Times extends Element {
         }
 
         if (acceptType && acceptTimes != 0) {
-            throw new IllegalArgumentException("run times less than accept times : (times):" + times + " (accept-times):" + acceptTimes);
+            throw new IllegalArgumentException("run times less than accept times : (times):" + times + " (left-times):" + acceptTimes);
         }
     }
 
