@@ -33,15 +33,41 @@ public interface Lexer {
      */
     Queue<Token> tokens();
 
+    /**
+     * Add Reserved Tokens
+     *
+     * @param token token-str
+     */
     void reserved(String token);
 
+    /**
+     * Back up Lexer Status
+     */
     void backup();
 
+    /**
+     * Recover Lexer Status
+     */
     void recover();
 
+    /**
+     * Get all reserved tokens
+     *
+     * @return set
+     */
     Set<String> getReservedToken();
 
+    /**
+     * Has More Tokens?
+     *
+     * @return has
+     */
     boolean isHasMore();
 
+    /**
+     * Lexer Line-Number
+     *
+     * @return line number.
+     */
     int getLineNumber();
 }
