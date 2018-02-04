@@ -11,7 +11,6 @@ import org.junit.Test;
 import java.util.function.Predicate;
 
 import static bnfgenast.bnf.BnfCom.rule;
-import static org.junit.Assert.*;
 
 public class PredicateCaptureTest {
 
