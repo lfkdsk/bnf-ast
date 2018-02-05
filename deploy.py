@@ -12,6 +12,7 @@ def parse_args(argv, version, step):
     parser.add_argument('-v', dest='base_version', default=version)
     parser.add_argument('-p', dest='version_step', default=step)
     parser.add_argument('-c', dest='comments', default=None)
+    parser.add_argument('-j', dest='jump', default=False)
 
     if argv is not None: 
         return parser.parse_args(argv)
@@ -81,6 +82,8 @@ def main(argv=None):
         sys.exit(0)
 
     version_code = generate_version_code(args, version, info)
+    if args.jump:
+        version_code = 'v{}'.format(version)
     
     # change mvn version
     os.system('mvn versions:set -DnewVersion={}'.format(version_code))
