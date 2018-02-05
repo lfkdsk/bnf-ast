@@ -23,7 +23,7 @@
   <dependency>
      <groupId>com.github.lfkdsk</groupId>
      <artifactId>bnf-ast</artifactId>
-     <version>v3.14</version>
+     <version>v3.15</version>
   </dependency>
   ```
 
