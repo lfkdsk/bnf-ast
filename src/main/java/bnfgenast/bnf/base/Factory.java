@@ -8,7 +8,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-
+@SuppressWarnings("unchecked")
 public abstract class Factory {
     /**
      * 创建方法的方法名

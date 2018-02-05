@@ -2,8 +2,6 @@
 package token;
 
 
-import bnfgenast.exception.UnSupportMethodException;
-
 /**
  * Boolean Token
  *
@@ -46,7 +44,7 @@ public class BoolToken extends ReservedToken {
             }
         }
 
-        throw new UnSupportMethodException("use wrong boolean token " + token);
+        throw new IllegalArgumentException("use wrong boolean token " + token);
     }
 
     @Override

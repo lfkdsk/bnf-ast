@@ -171,15 +171,6 @@ public class BnfCom {
         return this;
     }
 
-    public BnfCom Null() {
-        return Null(null);
-    }
-
-    public BnfCom Null(Class<? extends AstLeaf> clazz) {
-        elements.add(new NullToken(clazz));
-        return this;
-    }
-
     ///////////////////////////////////////////////////////////////////////////
     // Combinator 组合子
     ///////////////////////////////////////////////////////////////////////////
