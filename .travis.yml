@@ -6,7 +6,7 @@ jdk:
 before_deploy:
 - git config --local user.name "JustWe"
 - git config --local user.email "lfk_dsk@hotmail.com"
-- git tag "v3.15"
+- git tag -f "v3.16"
 deploy:
   provider: releases
   api_key:

@@ -52,8 +52,8 @@ def change_readme_travis(version_code):
     with open('./.travis.yml', 'r') as f:
          for line in f.readlines():
             line = re.sub(
-                r'- git tag \".*\"', 
-                '- git tag "{}"'.format(version_code),
+                r'- git tag -f \".*\"', 
+                '- git tag -f "{}"'.format(version_code),
                 line
             )
             str += line       
