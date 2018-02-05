@@ -6,15 +6,7 @@
 
     <groupId>lfkdsk</groupId>
     <artifactId>bnf-ast</artifactId>
-    <version>v3.14</version>
-
-    <developers>
-        <developer>
-            <name>lfkdsk</name>
-            <email>lfk_dsk@hotmail.com</email>
-            <url>https://github.com/lfkdsk</url>
-        </developer>
-    </developers>
+    <version>3.13</version>
 
     <properties>
         <project.java.version>1.8</project.java.version>
