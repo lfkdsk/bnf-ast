@@ -81,10 +81,10 @@ def main(argv=None):
         print 'args comments could not be None !'
         sys.exit(0)
 
-    version_code = generate_version_code(args, version, info)
-    if args.jump:
-        version_code = 'v{}'.format(version)
-    
+    version_code = 'v{}'.format(version)
+    if not args.jump:
+        version_code = generate_version_code(args, version, info)
+
     # change mvn version
     os.system('mvn versions:set -DnewVersion={}'.format(version_code))
     # change read me version
