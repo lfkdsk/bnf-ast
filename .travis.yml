@@ -16,3 +16,5 @@ deploy:
     all_branches: false
     branch: master
 
+after_success:
+  - mvn clean cobertura:cobertura coveralls:report
