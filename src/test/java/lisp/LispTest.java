@@ -37,7 +37,7 @@ public class LispTest {
         BnfCom problem = rule().sep("(").repeat(expr).sep(")");
 
 
-        AstNode node = problem.parse(lexer);
+        AstNode node = problem.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(4, node.childCount());
     }

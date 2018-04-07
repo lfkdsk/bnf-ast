@@ -17,7 +17,7 @@ public class LiteralTest {
         BnfCom literal = rule().literal(StringLiteral.class, "lfkdsk");
         JustLexer lexer = new JustLexer("lfkdsk");
 
-        AstNode node = literal.parse(lexer);
+        AstNode node = literal.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(((AstLeaf) node).token().getText(), "lfkdsk");
     }

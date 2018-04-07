@@ -21,12 +21,12 @@ public class OptionTreeTest {
         Lexer lexer = new JustLexer("lfkdsk");
 
 
-        AstNode node = option.parse(lexer);
+        AstNode node = option.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstLeaf);
 
         lexer = new JustLexer("lfkdsk(lfkdsk)");
-        node = option.parse(lexer);
+        node = option.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstList);

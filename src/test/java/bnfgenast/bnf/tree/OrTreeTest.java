@@ -28,7 +28,7 @@ public class OrTreeTest {
         BnfCom primary = wrapper().or(number, string, bool);
 
         Lexer lexer = new JustLexer("100000");
-        AstNode node = primary.parse(lexer);
+        AstNode node = primary.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstLeaf);

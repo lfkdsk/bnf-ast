@@ -22,7 +22,7 @@ public class PredicateCaptureTest {
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
         Assert.assertNotNull(node);
     }
 }

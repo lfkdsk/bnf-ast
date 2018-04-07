@@ -10,6 +10,7 @@ import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
 import java.util.List;
+import java.util.Queue;
 
 /**
  * Token 基类
@@ -27,13 +28,13 @@ public abstract class AToken extends Element {
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
-        return tokenTest(lexer.peek(0));
+    public boolean match(Queue<Token> lexer) throws ParseException {
+        return tokenTest(lexer.peek());
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
-        Token token = lexer.read();
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
+        Token token = lexer.poll();
 
         if (tokenTest(token)) {
             AstNode leaf = factory.make(token);

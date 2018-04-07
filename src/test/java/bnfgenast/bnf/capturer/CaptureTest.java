@@ -41,7 +41,7 @@ public class CaptureTest {
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstFake);
@@ -58,7 +58,7 @@ public class CaptureTest {
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstFake);
@@ -77,7 +77,7 @@ public class CaptureTest {
         lexer.reserved("lfkdsk");
         lexer.reserved("[");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstList);
@@ -100,6 +100,6 @@ public class CaptureTest {
         // number | id | string | bool
         BnfCom primary = wrapper().or(number, id, string, bool).consume(astNode -> System.out.println(astNode.toString()));
 
-        primary.parse(lexer);
+        primary.parse(lexer.tokens());
     }
 }

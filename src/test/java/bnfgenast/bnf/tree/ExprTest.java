@@ -32,7 +32,7 @@ public class ExprTest {
         BnfCom expr = rule().expr(number, operators);
         JustLexer lexer = new JustLexer("1 + 1 + 1");
 
-        AstNode node = expr.parse(lexer);
+        AstNode node = expr.parse(lexer.tokens());
         // node = (1 + 1) + 1
         Assert.assertNotNull(node);
         Assert.assertEquals(3, node.childCount());

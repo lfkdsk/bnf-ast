@@ -19,14 +19,14 @@ public class MaybeTreeTest {
         BnfCom maybe = rule().token("lfkdsk").maybe(rule().sep("(").ast(literal).sep(")"));
         Lexer lexer = new JustLexer("lfkdsk");
 
-        AstNode node = maybe.parse(lexer);
+        AstNode node = maybe.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(node.childCount(), 2);
         Assert.assertEquals(node.child(1).childCount(), 0);
         Assert.assertEquals(((AstLeaf) node.child(0)).token().getText(), "lfkdsk");
 
         lexer = new JustLexer("lfkdsk(lfkdsk)");
-        node = maybe.parse(lexer);
+        node = maybe.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(node.childCount(), 2);
         Assert.assertEquals(((AstLeaf) node.child(1)).token().getText(), "lfkdsk");

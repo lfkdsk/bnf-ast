@@ -20,12 +20,12 @@ public class SkipORTest {
         BnfCom id = rule().identifier(IDLiteral.class, lexer.getReservedToken());
         BnfCom token = rule().then(id).maybe("*");
 
-        AstNode node = token.parse(lexer);
+        AstNode node = token.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(((AstLeaf) node).token().getText(), "lfkdsk");
 
         lexer = new JustLexer("lfkdsk");
-        node = token.parse(lexer);
+        node = token.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(((AstLeaf) node).token().getText(), "lfkdsk");
     }

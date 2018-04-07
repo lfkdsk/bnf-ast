@@ -28,7 +28,7 @@ public class PrefixTreeTest {
         lexer.reserved("<");
         lexer.reserved("[");
 
-        AstNode node = ruleCombinator.parse(lexer);
+        AstNode node = ruleCombinator.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(node.childCount(), 2);
         Assert.assertTrue(node.child(0) instanceof AstLeaf);

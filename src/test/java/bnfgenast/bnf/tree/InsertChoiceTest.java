@@ -26,7 +26,7 @@ public class InsertChoiceTest {
         BnfCom primary = wrapper().or(number, bool);
 
         Lexer lexer = new JustLexer("\"lfkdsk\"");
-        AstNode node = primary.parse(lexer);
+        AstNode node = primary.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstLeaf);
@@ -46,7 +46,7 @@ public class InsertChoiceTest {
         primary.insertChoice(string);
 
         Lexer lexer = new JustLexer("\"lfkdsk\"");
-        AstNode node = primary.parse(lexer);
+        AstNode node = primary.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstLeaf);

@@ -24,7 +24,7 @@ public class CollectCaptureTest {
         );
 
         Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk");
-        AstNode node = times.parse(lexer1);
+        AstNode node = times.parse(lexer1.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstList);

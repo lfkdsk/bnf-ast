@@ -33,7 +33,7 @@ public class FactoryTest {
         BnfCom bnfCom = BnfCom.rule(AstFake2.class).token("lfkdsk");
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
-        AstNode node = bnfCom.parse(lexer);
+        AstNode node = bnfCom.parse(lexer.tokens());
         assertNotNull(node);
     }
 }

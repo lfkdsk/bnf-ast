@@ -21,7 +21,7 @@ public class LeafTest {
         Lexer lexer = new JustLexer("\"lfkdsk\" == \"123\"");
         lexer.reserved("==");
 
-        AstNode node = token.parse(lexer);
+        AstNode node = token.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(node.childCount(), 3);
         Assert.assertEquals(((AstLeaf)node.child(1)).token().getText(), "==");

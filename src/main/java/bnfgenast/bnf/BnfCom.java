@@ -2,6 +2,7 @@ package bnfgenast.bnf;
 
 import bnfgenast.ast.base.AstLeaf;
 import bnfgenast.ast.base.AstNode;
+import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.bnf.base.Factory;
 import bnfgenast.bnf.base.Operators;
@@ -14,7 +15,9 @@ import bnfgenast.bnf.leaf.SkipOR;
 import bnfgenast.bnf.token.*;
 import bnfgenast.bnf.tree.*;
 import bnfgenast.exception.ParseException;
-import bnfgenast.lexer.Lexer;
+
+import java.util.Queue;
+
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -30,7 +33,7 @@ import java.util.function.Predicate;
  * @version 1.0
  * @since 2018.01.20
  */
-public class BnfCom {
+public final class BnfCom {
 
     /**
      * 存储全部的BNF表达式
@@ -58,7 +61,7 @@ public class BnfCom {
      * @return 节点
      * @throws ParseException
      */
-    public AstNode parse(Lexer lexer) throws ParseException {
+    public AstNode parse(Queue<Token> lexer) throws ParseException {
         ArrayList<AstNode> results = new ArrayList<>();
         for (Element e : elements) {
             e.parse(lexer, results);
@@ -67,7 +70,7 @@ public class BnfCom {
     }
 
 
-    public boolean match(Lexer lexer) throws ParseException {
+    public boolean match(Queue<Token> lexer) throws ParseException {
         if (elements.size() == 0) {
             return true;
         } else {

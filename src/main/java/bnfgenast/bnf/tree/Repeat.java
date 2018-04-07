@@ -3,12 +3,14 @@ package bnfgenast.bnf.tree;
 
 import bnfgenast.ast.base.AstList;
 import bnfgenast.ast.base.AstNode;
+import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.BnfCom;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 重复出现的语句节点
@@ -31,7 +33,7 @@ public class Repeat extends Element {
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
         while (parser.match(lexer)) {
 
             AstNode node = parser.parse(lexer);
@@ -46,7 +48,7 @@ public class Repeat extends Element {
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
+    public boolean match(Queue<Token> lexer) throws ParseException {
         return parser.match(lexer);
     }
 }
