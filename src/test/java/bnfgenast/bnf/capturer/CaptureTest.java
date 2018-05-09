@@ -68,7 +68,7 @@ public class CaptureTest {
     @Test
     public void testComplexCaptureTest() {
         BnfCom leaf = rule().token("lfkdsk")
-                            .consume(node -> System.out.println("print 1"))
+                            .consume(node -> System.out.println(node.toString()))
                             .consume(node -> System.out.println("print 2"))
                             .token("[")
                             .consume((Consumer<AstList>) node -> node.getChildren().add(new AstFake(Collections.emptyList())));

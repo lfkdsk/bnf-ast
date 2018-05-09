@@ -9,7 +9,7 @@ public class PredicateCapture<T extends AstNode> extends Capture<T> {
 
     private Predicate<T> predicate;
 
-    private boolean testResult = true;
+    private boolean testResult;
 
     public PredicateCapture(BnfCom parser, Predicate<T> predicate, boolean testResult) {
         super(parser);
@@ -19,16 +19,10 @@ public class PredicateCapture<T extends AstNode> extends Capture<T> {
 
     @Override
     protected void capture(T node) {
-        if (testResult) {
-            if (!predicate.test(node)) {
-                throw new IllegalArgumentException("Assert Capture Test Fail : result " + testResult + " "
-                        + " with node :" + node.toString());
-            }
-        } else {
-            if (predicate.test(node)) {
-                throw new IllegalArgumentException("Assert Capture Test Fail : result " + testResult + " "
-                        + " with node :" + node.toString());
-            }
+        boolean result = predicate.test(node);
+        if (testResult ^ result) {
+            throw new IllegalArgumentException("Assert Capture Test Fail : result " + testResult + " "
+                    + " with node :" + node.toString());
         }
     }
 }

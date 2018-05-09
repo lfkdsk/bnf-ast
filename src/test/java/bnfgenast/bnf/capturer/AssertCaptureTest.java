@@ -72,7 +72,7 @@ public class AssertCaptureTest {
         BnfCom string = rule().string(StringLiteral.class);
 
         BnfCom leaf = rule().ast(string)
-                            .test(node -> node instanceof AstNode)
+                            .test(AstNode.class::isInstance)
                             .test((Predicate<AstLeaf>) node -> {
                                 System.out.println(node.token());
                                 return !node.token().getText().equals("lfkdsk");
