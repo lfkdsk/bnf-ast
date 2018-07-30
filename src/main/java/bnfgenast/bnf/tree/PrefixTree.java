@@ -21,10 +21,13 @@ public class PrefixTree extends Element {
 
     @Override
     public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
+        // 找出所有满足条件的后续节点
         Queue<BnfCom> parsers = choose(lexer);
+        // 备份 Lexer 的状态
         Queue<Token> recover = new ArrayDeque<>(lexer);
 
         while (parsers != null && !parsers.isEmpty()) {
+            // 尝试进行 Parser 动作
             BnfCom parser = parsers.poll();
             AstNode node;
 
@@ -33,6 +36,7 @@ public class PrefixTree extends Element {
                 nodes.add(node);
                 break;
             } catch (ParseException e) {
+                // 状态修复 重新进行 Parser
                 lexer.clear();
                 lexer.addAll(recover);
             }

@@ -25,4 +25,18 @@ public class PredicateCaptureTest {
         AstNode node = leaf.parse(lexer.tokens());
         Assert.assertNotNull(node);
     }
+
+    @Test()
+    public void testPredicate() {
+        BnfCom leaf = rule().token("if")
+                            .test((Predicate<AstLeaf>) node -> node.token().getText().equals("if"))
+                            .token("bool");
+
+        Lexer lexer = new JustLexer("if bool");
+        lexer.reserved("if");
+        lexer.reserved("bool");
+
+        AstNode node = leaf.parse(lexer.tokens());
+        Assert.assertNotNull(node);
+    }
 }

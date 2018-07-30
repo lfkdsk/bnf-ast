@@ -140,10 +140,6 @@ public class Token {
         this.tag = tag;
     }
 
-    public int getLineNumber() {
-        return lineNumber;
-    }
-
     public boolean isIdentifier() {
         return false;
     }
