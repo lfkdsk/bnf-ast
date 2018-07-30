@@ -144,3 +144,4 @@ gradle-app.setting
 target/
 sample/.gradle/*
 sample/gradle/*
+gradle/*

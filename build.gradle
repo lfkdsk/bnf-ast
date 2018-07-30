@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+group = 'lfkdsk'
+version = 'v3.16'
+
+description = """"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+
+
+repositories {
+        
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+dependencies {
+    compile group: 'org.projectlombok', name: 'lombok', version:'1.16.12'
+    compile group: 'org.jetbrains', name: 'annotations', version:'13.0'
+    compile group: 'junit', name: 'junit', version:'4.12'
+}
