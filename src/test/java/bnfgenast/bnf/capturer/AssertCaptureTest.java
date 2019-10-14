@@ -23,7 +23,7 @@ public class AssertCaptureTest {
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
         Assert.assertNotNull(node);
     }
 
@@ -36,7 +36,7 @@ public class AssertCaptureTest {
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
         Assert.assertNotNull(node);
     }
 
@@ -69,10 +69,10 @@ public class AssertCaptureTest {
     @Test(expected = IllegalArgumentException.class)
     public void testAssertCaptureString() {
         // literal is "lfkdsk" but not accept "lfkdsk"
-        BnfCom string = rule().string(StringLiteral.class);
+        BnfCom string = rule().string(StringLiteral::new);
 
         BnfCom leaf = rule().ast(string)
-                            .test(node -> node instanceof AstNode)
+                            .test(AstNode.class::isInstance)
                             .test((Predicate<AstLeaf>) node -> {
                                 System.out.println(node.token());
                                 return !node.token().getText().equals("lfkdsk");
@@ -81,7 +81,7 @@ public class AssertCaptureTest {
 
         Lexer lexer = new JustLexer("\"lfkdsk\"");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
         Assert.assertNotNull(node);
     }
 }

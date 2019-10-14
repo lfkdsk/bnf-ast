@@ -20,27 +20,27 @@ public class TokenTest {
 
     @Test
     public void testTokens() {
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom id = rule().identifier(IDLiteral.class, reversed());
-        BnfCom string = rule().string(StringLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom id = rule().identifier(IDLiteral::new, reversed());
+        BnfCom string = rule().string(StringLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         BnfCom primary = wrapper().or(number, id, string, bool);
 
         Lexer lexer = new JustLexer("10000 \"lfkdsk\" lfkdsk true");
-        AstNode numberNode = primary.parse(lexer);
+        AstNode numberNode = primary.parse(lexer.tokens());
         Assert.assertNotNull(numberNode);
         Assert.assertEquals(((AstLeaf) numberNode).token().getText(), "10000");
 
-        AstNode stringNode = primary.parse(lexer);
+        AstNode stringNode = primary.parse(lexer.tokens());
         Assert.assertNotNull(stringNode);
         Assert.assertEquals(((AstLeaf) stringNode).token().getText(), "lfkdsk");
 
-        AstNode idNode = primary.parse(lexer);
+        AstNode idNode = primary.parse(lexer.tokens());
         Assert.assertNotNull(idNode);
         Assert.assertEquals(((AstLeaf) idNode).token().getText(), "lfkdsk");
 
-        AstNode boolNode = primary.parse(lexer);
+        AstNode boolNode = primary.parse(lexer.tokens());
         Assert.assertNotNull(boolNode);
         Assert.assertEquals(((AstLeaf) boolNode).token().getText(), "true");
     }

@@ -7,6 +7,8 @@ import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
 
 public class SkipOR extends Leaf {
 
@@ -20,17 +22,17 @@ public class SkipOR extends Leaf {
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
         String pat = tokens[0];
-        Token token = lexer.peek(0);
+        Token token = lexer.peek();
 
-        if (token.getText().equals(pat)) {
-            lexer.read();
+        if (Objects.nonNull(token) && token.getText().equals(pat)) {
+            lexer.poll();
         }
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
+    public boolean match(Queue<Token> lexer) throws ParseException {
         return true;
     }
 }

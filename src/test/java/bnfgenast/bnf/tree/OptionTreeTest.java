@@ -16,17 +16,17 @@ public class OptionTreeTest {
 
     @Test
     public void testOption() {
-        BnfCom literal = rule().literal(StringLiteral.class, "lfkdsk");
+        BnfCom literal = rule().literal(StringLiteral::new, "lfkdsk");
         BnfCom option = rule().token("lfkdsk").option(rule().sep("(").ast(literal).sep(")"));
         Lexer lexer = new JustLexer("lfkdsk");
 
 
-        AstNode node = option.parse(lexer);
+        AstNode node = option.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstLeaf);
 
         lexer = new JustLexer("lfkdsk(lfkdsk)");
-        node = option.parse(lexer);
+        node = option.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstList);

@@ -17,15 +17,15 @@ public class SkipORTest {
     public void testSkipOR() {
         Lexer lexer = new JustLexer("lfkdsk*");
 
-        BnfCom id = rule().identifier(IDLiteral.class, lexer.getReservedToken());
+        BnfCom id = rule().identifier(IDLiteral::new, lexer.getReservedToken());
         BnfCom token = rule().then(id).maybe("*");
 
-        AstNode node = token.parse(lexer);
+        AstNode node = token.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(((AstLeaf) node).token().getText(), "lfkdsk");
 
         lexer = new JustLexer("lfkdsk");
-        node = token.parse(lexer);
+        node = token.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(((AstLeaf) node).token().getText(), "lfkdsk");
     }

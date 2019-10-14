@@ -4,10 +4,12 @@ package bnfgenast.bnf.token;
 import bnfgenast.ast.base.AstLeaf;
 import bnfgenast.ast.token.Token;
 
+import java.util.function.Function;
+
 public class BoolToken extends AToken {
 
-    public BoolToken(Class<? extends AstLeaf> clazz) {
-        super(clazz);
+    public BoolToken(Function<Token, ? extends AstLeaf> factory) {
+        super(factory);
     }
 
     @Override

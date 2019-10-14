@@ -20,15 +20,15 @@ public class OrTreeTest {
 
     @Test
     public void testOrTree() {
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom string = rule().string(StringLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom string = rule().string(StringLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         // number | string | bool
         BnfCom primary = wrapper().or(number, string, bool);
 
         Lexer lexer = new JustLexer("100000");
-        AstNode node = primary.parse(lexer);
+        AstNode node = primary.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstLeaf);

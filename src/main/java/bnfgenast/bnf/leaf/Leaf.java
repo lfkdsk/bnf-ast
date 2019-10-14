@@ -8,6 +8,8 @@ import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
 
 /**
  * 叶节点
@@ -20,8 +22,8 @@ public class Leaf extends Element {
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
-        Token token = lexer.read();
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
+        Token token = lexer.poll();
 
         if (token.isIdentifier()) {
             for (String t : tokens) {
@@ -50,10 +52,10 @@ public class Leaf extends Element {
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
-        Token token = lexer.peek(0);
+    public boolean match(Queue<Token> lexer) throws ParseException {
+        Token token = lexer.peek();
 
-        if (token.isIdentifier()) {
+        if (Objects.nonNull(token) && token.isIdentifier()) {
             for (String t : tokens) {
                 if (t.equals(token.getText())) {
                     return true;

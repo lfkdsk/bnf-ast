@@ -25,14 +25,14 @@ public class ExprTest {
 
     @Test
     public void testExpr() {
-        BnfCom number = rule().number(NumberLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
         Operators operators = new Operators();
-        operators.add("+", 1, true, ADD.class);
+        operators.add("+", 1, true, ADD::new);
 
         BnfCom expr = rule().expr(number, operators);
         JustLexer lexer = new JustLexer("1 + 1 + 1");
 
-        AstNode node = expr.parse(lexer);
+        AstNode node = expr.parse(lexer.tokens());
         // node = (1 + 1) + 1
         Assert.assertNotNull(node);
         Assert.assertEquals(3, node.childCount());

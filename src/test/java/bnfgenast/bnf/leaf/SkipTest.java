@@ -17,11 +17,11 @@ public class SkipTest {
     public void testSkip() {
         Lexer lexer = new JustLexer("function name()");
 
-        BnfCom id = rule().identifier(IDLiteral.class, lexer.getReservedToken());
+        BnfCom id = rule().identifier(IDLiteral::new, lexer.getReservedToken());
         BnfCom token = rule().sep("function").then(id).sep("(").sep(")");
 
 
-        AstNode node = token.parse(lexer);
+        AstNode node = token.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(((AstLeaf) node).token().getText(), "name");
     }

@@ -2,10 +2,12 @@ package bnfgenast.bnf.base;
 
 
 import bnfgenast.ast.base.AstNode;
+import bnfgenast.ast.token.Token;
 import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
 import java.util.List;
+import java.util.Queue;
 
 public abstract class Element {
     /**
@@ -15,7 +17,7 @@ public abstract class Element {
      * @param nodes 节点
      * @throws ParseException
      */
-    public abstract void parse(Lexer lexer, List<AstNode> nodes)
+    public abstract void parse(Queue<Token> lexer, List<AstNode> nodes)
             throws ParseException;
 
     /**
@@ -25,7 +27,7 @@ public abstract class Element {
      * @return tof?
      * @throws ParseException
      */
-    public abstract boolean match(Lexer lexer) throws ParseException;
+    public abstract boolean match(Queue<Token> lexer) throws ParseException;
 
 
     @Override

@@ -36,12 +36,12 @@ public class CaptureTest {
 
     @Test
     public void testCaptureTest() {
-        BnfCom leaf = wrapper().consume(rule(AstFake.class).token("lfkdsk"), (Consumer<AstFake>) astNode -> astNode.setSuccess("ok"));
+        BnfCom leaf = wrapper().consume(rule(AstFake::new).token("lfkdsk"), (Consumer<AstFake>) astNode -> astNode.setSuccess("ok"));
 
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstFake);
@@ -50,7 +50,7 @@ public class CaptureTest {
 
     @Test
     public void testCaptureWithoutWrapper() {
-        BnfCom leaf = rule(AstFake.class).token("lfkdsk")
+        BnfCom<AstFake> leaf = rule(AstFake::new).token("lfkdsk")
                                          .consume(node -> System.out.println("print 1"))
                                          .consume(node -> System.out.println("print 2"))
                                          .consume((Consumer<AstFake>) astNode -> astNode.setSuccess("ok"));
@@ -58,7 +58,7 @@ public class CaptureTest {
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstFake);
@@ -68,16 +68,16 @@ public class CaptureTest {
     @Test
     public void testComplexCaptureTest() {
         BnfCom leaf = rule().token("lfkdsk")
-                            .consume(node -> System.out.println("print 1"))
+                            .consume(node -> System.out.println(node.toString()))
                             .consume(node -> System.out.println("print 2"))
-                            .token("[")
+                            .token("dsk")
                             .consume((Consumer<AstList>) node -> node.getChildren().add(new AstFake(Collections.emptyList())));
 
-        Lexer lexer = new JustLexer("lfkdsk [");
+        Lexer lexer = new JustLexer("lfkdsk dsk");
         lexer.reserved("lfkdsk");
-        lexer.reserved("[");
+        lexer.reserved("dsk");
 
-        AstNode node = leaf.parse(lexer);
+        AstNode node = leaf.parse(lexer.tokens());
 
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstList);
@@ -92,14 +92,14 @@ public class CaptureTest {
         lexer.reserved(")");
 
         // use
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom id = rule().identifier(IDLiteral.class, lexer.getReservedToken());
-        BnfCom string = rule().string(StringLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom id = rule().identifier(IDLiteral::new, lexer.getReservedToken());
+        BnfCom string = rule().string(StringLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         // number | id | string | bool
         BnfCom primary = wrapper().or(number, id, string, bool).consume(astNode -> System.out.println(astNode.toString()));
 
-        primary.parse(lexer);
+        primary.parse(lexer.tokens());
     }
 }

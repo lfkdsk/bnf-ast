@@ -24,10 +24,10 @@ public class LispTest {
         lexer.reserved(")");
 
         // use
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom id = rule().identifier(IDLiteral.class, lexer.getReservedToken());
-        BnfCom string = rule().string(StringLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom id = rule().identifier(IDLiteral::new, lexer.getReservedToken());
+        BnfCom string = rule().string(StringLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         // number | id | string | bool
         BnfCom primary = wrapper().or(number, id, string, bool);
@@ -37,7 +37,7 @@ public class LispTest {
         BnfCom problem = rule().sep("(").repeat(expr).sep(")");
 
 
-        AstNode node = problem.parse(lexer);
+        AstNode node = problem.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(4, node.childCount());
     }

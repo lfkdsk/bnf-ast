@@ -1,11 +1,12 @@
 package bnfgenast.bnf.tree;
 
 import bnfgenast.ast.base.AstNode;
+import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.BnfCom;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.exception.ParseException;
-import bnfgenast.lexer.Lexer;
 
+import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -18,9 +19,9 @@ public class PrefixTree extends Element {
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
-        Queue<BnfCom> parsers = choose(lexer);
-        lexer.backup();
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
+        final Queue<BnfCom> parsers = choose(lexer);
+        final Queue<Token> recover = new ArrayDeque<>(lexer);
 
         while (parsers != null && !parsers.isEmpty()) {
             BnfCom parser = parsers.poll();
@@ -31,17 +32,18 @@ public class PrefixTree extends Element {
                 nodes.add(node);
                 break;
             } catch (ParseException e) {
-                lexer.recover();
+                lexer.clear();
+                lexer.addAll(recover);
             }
         }
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
+    public boolean match(Queue<Token> lexer) throws ParseException {
         return choose(lexer) != null;
     }
 
-    protected Queue<BnfCom> choose(Lexer lexer) throws ParseException {
+    protected Queue<BnfCom> choose(Queue<Token> lexer) throws ParseException {
         Queue<BnfCom> chooses = new LinkedList<>();
 
         for (BnfCom parser : parsers) {

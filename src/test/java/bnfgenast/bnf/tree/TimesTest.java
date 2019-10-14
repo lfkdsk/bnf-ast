@@ -21,7 +21,7 @@ public class TimesTest {
 
         Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk");
 
-        AstNode node = times.parse(lexer1);
+        AstNode node = times.parse(lexer1.tokens());
         Assert.assertNotNull(node);
         Assert.assertTrue(node instanceof AstList);
         Assert.assertEquals(node.childCount(), 3);
@@ -37,7 +37,7 @@ public class TimesTest {
 
         Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk");
 
-        AstNode node = times.parse(lexer1);
+        AstNode node = times.parse(lexer1.tokens());
         Assert.assertNotNull(node);
     }
 
@@ -51,7 +51,7 @@ public class TimesTest {
 
         Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk");
 
-        AstNode node = times.parse(lexer1);
+        AstNode node = times.parse(lexer1.tokens());
         Assert.assertNotNull(node);
     }
 
@@ -65,7 +65,7 @@ public class TimesTest {
 
         Lexer lexer1 = new JustLexer("lfkdsk,lfkdsk,lfkdsk,lfkdsk,lfkdsk");
 
-        AstNode node = times.parse(lexer1);
+        AstNode node = times.parse(lexer1.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(5, node.childCount());
     }

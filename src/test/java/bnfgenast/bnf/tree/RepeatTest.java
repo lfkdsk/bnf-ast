@@ -22,7 +22,7 @@ public class RepeatTest {
         lexer.reserved("llll");
         lexer.reserved("lfkdsk");
 
-        AstNode node = params.parse(lexer);
+        AstNode node = params.parse(lexer.tokens());
         Assert.assertNotNull(node);
         Assert.assertEquals(node.childCount(), 3);
         Assert.assertTrue(node instanceof AstList);

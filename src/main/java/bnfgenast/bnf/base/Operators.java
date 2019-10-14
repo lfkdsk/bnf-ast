@@ -4,6 +4,8 @@ package bnfgenast.bnf.base;
 import bnfgenast.ast.base.AstNode;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.function.Function;
 
 /**
  * Operator Node
@@ -23,7 +25,7 @@ public class Operators extends HashMap<String, Precedence> {
      * @param clazz     create node class file
      */
     public void add(String name, int pres,
-                    boolean leftAssoc, Class<? extends AstNode> clazz) {
+                    boolean leftAssoc, Function<List<AstNode>, ? extends AstNode> clazz) {
         put(name, new Precedence(pres, leftAssoc, clazz));
     }
 }

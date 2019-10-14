@@ -2,38 +2,37 @@ package bnfgenast.bnf.tree;
 
 
 import bnfgenast.ast.base.AstLeaf;
+import bnfgenast.ast.base.AstList;
 import bnfgenast.ast.base.AstNode;
 import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.BnfCom;
-import bnfgenast.bnf.base.Element;
-import bnfgenast.bnf.base.Factory;
-import bnfgenast.bnf.base.Operators;
-import bnfgenast.bnf.base.Precedence;
+import bnfgenast.bnf.base.*;
 import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
 
 /**
  * 表达式子树
  */
-public class Expr extends Element {
-    protected Factory factory;
+public class Expr<T extends AstNode> extends Element {
+    protected AstListCreator<T> factory;
 
     protected Operators ops;
 
     protected BnfCom factor;
 
-    public Expr(Class<? extends AstNode> clazz, BnfCom factor, Operators ops) {
-
-        this.factory = Factory.getForAstList(clazz);
+    public Expr(AstListCreator<T> factory, BnfCom factor, Operators ops) {
+        this.factory = factory;
         this.factor = factor;
         this.ops = ops;
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
         AstNode right = factor.parse(lexer);
 
         Precedence prec;
@@ -45,12 +44,12 @@ public class Expr extends Element {
         nodes.add(right);
     }
 
-    private AstNode doShift(Lexer lexer, AstNode left, int prec) throws ParseException {
-        ArrayList<AstNode> list = new ArrayList<>();
+    private T doShift(Queue<Token> lexer, AstNode left, int prec) throws ParseException {
+        List<AstNode> list = new ArrayList<>();
 
         list.add(left);
         // 读取一个符号
-        list.add(new AstLeaf(lexer.read()));
+        list.add(new AstLeaf(lexer.poll()));
         // 返回节点放在右子树
         AstNode right = factor.parse(lexer);
 
@@ -62,7 +61,7 @@ public class Expr extends Element {
 
         list.add(right);
 
-        return factory.make(list);
+        return factory.apply(list);
     }
 
     /**
@@ -72,10 +71,10 @@ public class Expr extends Element {
      * @return 符号
      * @throws ParseException
      */
-    private Precedence nextOperator(Lexer lexer) throws ParseException {
-        Token token = lexer.peek(0);
+    private Precedence nextOperator(Queue<Token> lexer) throws ParseException {
+        Token token = lexer.peek();
 
-        if (token.isIdentifier()) {
+        if (Objects.nonNull(token) && token.isIdentifier()) {
             // 从符号表里找对应的符号
             return ops.get(token.getText());
         } else {
@@ -99,7 +98,7 @@ public class Expr extends Element {
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
+    public boolean match(Queue<Token> lexer) throws ParseException {
         return factor.match(lexer);
     }
 }

@@ -30,10 +30,10 @@ public class FactoryTest {
 
     @Test
     public void testMake() {
-        BnfCom bnfCom = BnfCom.rule(AstFake2.class).token("lfkdsk");
+        BnfCom bnfCom = BnfCom.rule(AstFake2::new).token("lfkdsk");
         Lexer lexer = new JustLexer("lfkdsk");
         lexer.reserved("lfkdsk");
-        AstNode node = bnfCom.parse(lexer);
+        AstNode node = bnfCom.parse(lexer.tokens());
         assertNotNull(node);
     }
 }

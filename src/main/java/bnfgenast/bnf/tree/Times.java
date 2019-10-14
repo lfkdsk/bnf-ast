@@ -2,13 +2,14 @@ package bnfgenast.bnf.tree;
 
 import bnfgenast.ast.base.AstList;
 import bnfgenast.ast.base.AstNode;
+import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.BnfCom;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.exception.ParseException;
-import bnfgenast.lexer.Lexer;
 import bnfgenast.utils.ObjectHelper;
 
 import java.util.List;
+import java.util.Queue;
 
 public class Times extends Element {
 
@@ -39,8 +40,8 @@ public class Times extends Element {
     }
 
     @Override
-    public void parse(Lexer lexer, List<AstNode> nodes) throws ParseException {
-        while (parser.match(lexer)) {
+    public void parse(Queue<Token> lexer, List<AstNode> nodes) throws ParseException {
+        while (acceptTimes != 0 && parser.match(lexer)) {
 
             AstNode node = parser.parse(lexer);
             // token or list
@@ -70,7 +71,7 @@ public class Times extends Element {
     }
 
     @Override
-    public boolean match(Lexer lexer) throws ParseException {
+    public boolean match(Queue<Token> lexer) throws ParseException {
         return parser.match(lexer);
     }
 }
