@@ -2,13 +2,11 @@ package bnfgenast.bnf.tree;
 
 
 import bnfgenast.ast.base.AstLeaf;
+import bnfgenast.ast.base.AstList;
 import bnfgenast.ast.base.AstNode;
 import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.BnfCom;
-import bnfgenast.bnf.base.Element;
-import bnfgenast.bnf.base.Factory;
-import bnfgenast.bnf.base.Operators;
-import bnfgenast.bnf.base.Precedence;
+import bnfgenast.bnf.base.*;
 import bnfgenast.exception.ParseException;
 import bnfgenast.lexer.Lexer;
 
@@ -20,16 +18,15 @@ import java.util.Queue;
 /**
  * 表达式子树
  */
-public class Expr extends Element {
-    protected Factory factory;
+public class Expr<T extends AstNode> extends Element {
+    protected AstListCreator<T> factory;
 
     protected Operators ops;
 
     protected BnfCom factor;
 
-    public Expr(Class<? extends AstNode> clazz, BnfCom factor, Operators ops) {
-
-        this.factory = Factory.getForAstList(clazz);
+    public Expr(AstListCreator<T> factory, BnfCom factor, Operators ops) {
+        this.factory = factory;
         this.factor = factor;
         this.ops = ops;
     }
@@ -47,8 +44,8 @@ public class Expr extends Element {
         nodes.add(right);
     }
 
-    private AstNode doShift(Queue<Token> lexer, AstNode left, int prec) throws ParseException {
-        ArrayList<AstNode> list = new ArrayList<>();
+    private T doShift(Queue<Token> lexer, AstNode left, int prec) throws ParseException {
+        List<AstNode> list = new ArrayList<>();
 
         list.add(left);
         // 读取一个符号
@@ -64,7 +61,7 @@ public class Expr extends Element {
 
         list.add(right);
 
-        return factory.make(list);
+        return factory.apply(list);
     }
 
     /**

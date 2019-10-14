@@ -19,8 +19,8 @@ public class InsertChoiceTest {
 
     @Test(expected = ParseException.class)
     public void testInsertChoice() {
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         // number | string | bool
         BnfCom primary = wrapper().or(number, bool);
@@ -35,13 +35,13 @@ public class InsertChoiceTest {
 
     @Test
     public void testInsertChoice1() {
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         // number | string | bool
         BnfCom primary = wrapper().or(number, bool);
 
-        BnfCom string = rule().string(StringLiteral.class);
+        BnfCom string = rule().string(StringLiteral::new);
 
         primary.insertChoice(string);
 

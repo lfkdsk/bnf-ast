@@ -1,10 +1,12 @@
 package bnfgenast.bnf;
 
 import bnfgenast.ast.base.AstLeaf;
+import bnfgenast.ast.base.AstList;
 import bnfgenast.ast.base.AstNode;
 import bnfgenast.ast.token.Token;
+import bnfgenast.bnf.base.AstLeafCreator;
+import bnfgenast.bnf.base.AstListCreator;
 import bnfgenast.bnf.base.Element;
-import bnfgenast.bnf.base.Factory;
 import bnfgenast.bnf.base.Operators;
 import bnfgenast.bnf.capturer.CollectCapture;
 import bnfgenast.bnf.capturer.PredicateCapture;
@@ -24,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -33,25 +36,25 @@ import java.util.function.Predicate;
  * @version 1.0
  * @since 2018.01.20
  */
-public final class BnfCom {
+public final class BnfCom<T extends AstNode> {
 
     /**
      * 存储全部的BNF表达式
      */
-    protected List<Element> elements;
-
-    protected Factory factory;
+    private List<Element> elements;
+    private AstListCreator<T> constructor;
 
     @Getter
     private String ruleName;
 
-    public BnfCom(Class<? extends AstNode> clazz) {
-        reset(clazz);
+    protected BnfCom(BnfCom<T> parser) {
+        this.elements = parser.elements;
+        this.constructor = parser.constructor;
     }
 
-    protected BnfCom(BnfCom parser) {
-        elements = parser.elements;
-        factory = parser.factory;
+    public BnfCom(AstListCreator<T> constructor) {
+        this.constructor = constructor;
+        this.elements = new ArrayList<>();
     }
 
     /**
@@ -61,12 +64,12 @@ public final class BnfCom {
      * @return 节点
      * @throws ParseException
      */
-    public AstNode parse(Queue<Token> lexer) throws ParseException {
-        ArrayList<AstNode> results = new ArrayList<>();
+    public T parse(Queue<Token> lexer) throws ParseException {
+        List<AstNode> results = new ArrayList<>();
         for (Element e : elements) {
             e.parse(lexer, results);
         }
-        return factory.make(results);
+        return constructor.apply(results);
     }
 
 
@@ -79,23 +82,31 @@ public final class BnfCom {
         }
     }
 
+    private static AstListCreator<AstNode> fold = (children) -> {
+        if (children != null && children.size() == 1) {
+            return children.get(0);
+        } else {
+            return new AstList(children);
+        }
+    };
+
     /**
      * 初始化 / 新定义一个一条产生式
      *
      * @return Ast
      */
-    public static BnfCom rule() {
-        return rule(null);
+    public static BnfCom<AstNode> rule() {
+        return rule(fold);
     }
 
     /**
      * 初始化 / 新定义一个一条产生式
      *
-     * @param clazz 类
+     * @param constructor class constructor
      * @return Ast
      */
-    public static BnfCom rule(Class<? extends AstNode> clazz) {
-        return new BnfCom(clazz);
+    public static <E extends AstNode> BnfCom<E> rule(AstListCreator<E> constructor) {
+        return new BnfCom<>(constructor);
     }
 
     /**
@@ -103,32 +114,22 @@ public final class BnfCom {
      *
      * @return Wrapper's Inner Ast
      */
-    public static BnfCom wrapper() {
-        return wrapper(null);
+    public static BnfCom<AstNode> wrapper() {
+        return wrapper(fold);
     }
 
-    public static BnfCom wrapper(Factory factory) {
-        BnfCom inner = rule();
-        inner.factory = Factory.getForWrapper(factory);
-        inner.reset();
-
-        return inner;
+    public static <E extends AstNode> BnfCom<E> wrapper(AstListCreator<E> constructor) {
+        return rule(constructor);
     }
 
-    public BnfCom reset() {
+    public BnfCom<T> reset() {
         elements = new ArrayList<>();
         return this;
     }
 
-    public BnfCom reset(Class<? extends AstNode> clazz) {
-        elements = new ArrayList<>();
-        factory = Factory.getForAstList(clazz);
-        return this;
-    }
-
-    public BnfCom of(BnfCom origin) {
+    public BnfCom<T> of(BnfCom<T> origin) {
         this.elements = new ArrayList<>(origin.elements);
-        this.factory = origin.factory;
+        this.constructor = origin.constructor;
         return this;
     }
 
@@ -137,40 +138,39 @@ public final class BnfCom {
     ///////////////////////////////////////////////////////////////////////////
 
     public BnfCom number() {
-        return number(null);
+        return number(AstLeaf::new);
     }
 
-
-    public BnfCom number(Class<? extends AstLeaf> clazz) {
-        elements.add(new NumToken(clazz));
+    public BnfCom number(AstLeafCreator<? extends AstLeaf> factory) {
+        elements.add(new NumToken(factory));
         return this;
     }
 
     public BnfCom identifier(Set<String> reserved) {
-        return identifier(null, reserved);
+        return identifier(AstLeaf::new, reserved);
     }
 
-    public BnfCom identifier(Class<? extends AstLeaf> clazz,
+    public BnfCom identifier(AstLeafCreator<? extends AstLeaf> factory,
                              Set<String> reserved) {
-        elements.add(new IDToken(clazz, reserved));
+        elements.add(new IDToken(factory, reserved));
         return this;
     }
 
     public BnfCom string() {
-        return string(null);
+        return string(AstLeaf::new);
     }
 
-    public BnfCom string(Class<? extends AstLeaf> clazz) {
-        elements.add(new StrToken(clazz));
+    public BnfCom string(AstLeafCreator<? extends AstLeaf> factory) {
+        elements.add(new StrToken(factory));
         return this;
     }
 
     public BnfCom bool() {
-        return bool(null);
+        return bool(AstLeaf::new);
     }
 
-    public BnfCom bool(Class<? extends AstLeaf> clazz) {
-        elements.add(new BoolToken(clazz));
+    public BnfCom bool(Function<Token, ? extends AstLeaf> factory) {
+        elements.add(new BoolToken(factory));
         return this;
     }
 
@@ -184,7 +184,7 @@ public final class BnfCom {
      * @param pat
      * @return
      */
-    public BnfCom token(String... pat) {
+    public BnfCom<T> token(String... pat) {
         elements.add(new Leaf(pat));
         return this;
     }
@@ -206,7 +206,7 @@ public final class BnfCom {
      * @param parser BNF
      * @return BNF
      */
-    public BnfCom ast(BnfCom parser) {
+    public BnfCom<T> ast(BnfCom parser) {
         elements.add(new Tree(parser));
         return this;
     }
@@ -217,12 +217,12 @@ public final class BnfCom {
      * @param parsers BNF
      * @return BNF
      */
-    public BnfCom or(BnfCom... parsers) {
+    public BnfCom<T> or(BnfCom... parsers) {
         elements.add(new OrTree(parsers));
         return this;
     }
 
-    public BnfCom maybe(BnfCom parser) {
+    public BnfCom<T> maybe(BnfCom parser) {
         BnfCom parser1 = new BnfCom(parser);
 
         parser1.reset();
@@ -253,109 +253,110 @@ public final class BnfCom {
      * @param parser BNF
      * @return BNF
      */
-    public BnfCom repeat(BnfCom parser) {
+    public BnfCom<T> repeat(BnfCom parser) {
         elements.add(new Repeat(parser, false));
         return this;
     }
 
-    public BnfCom expr(BnfCom subExp, Operators operators) {
-        elements.add(new Expr(null, subExp, operators));
+    public BnfCom<T> expr(BnfCom subExp, Operators operators) {
+        elements.add(new Expr<>(AstList::new, subExp, operators));
         return this;
     }
 
-    public BnfCom expr(Class<? extends AstNode> clazz, BnfCom subExp,
-                       Operators operators) {
-        elements.add(new Expr(clazz, subExp, operators));
+    public BnfCom<T> expr(AstListCreator<T> factory, BnfCom subExp,
+                          Operators operators) {
+        elements.add(new Expr<>(factory, subExp, operators));
         return this;
     }
 
-    public BnfCom prefix(BnfCom... parsers) {
+    public BnfCom<T> prefix(BnfCom... parsers) {
         elements.add(new PrefixTree(parsers));
         return this;
     }
 
-    public BnfCom insertChoice(BnfCom parser) {
+    public BnfCom<T> insertChoice(BnfCom parser) {
         Element e = elements.get(0);
         if (e instanceof OrTree) {
             ((OrTree) e).insert(parser);
         } else {
-            BnfCom otherWise = new BnfCom(this);
-            reset(null);
+            BnfCom<T> otherWise = new BnfCom<>(this);
+            reset();
             or(parser, otherWise);
         }
         return this;
     }
 
-    public BnfCom literal(Class<? extends AstLeaf> strLiteral, String literal) {
-        elements.add(new StableStringToken(strLiteral, literal));
+    public BnfCom<T> literal(Function<Token, ? extends AstLeaf> factory, String literal) {
+        elements.add(new StableStringToken(factory, literal));
         return this;
     }
 
-    public BnfCom name(String name) {
+    public BnfCom<T> name(String name) {
         this.ruleName = name;
         return this;
     }
 
-    public BnfCom times(BnfCom parser, int times) {
+    public BnfCom<T> times(BnfCom parser, int times) {
         elements.add(new Times(parser, times));
         return this;
     }
 
-    public BnfCom most(BnfCom parser, int maxTimes) {
+    public BnfCom<T> most(BnfCom parser, int maxTimes) {
         elements.add(new Times(parser, Integer.MAX_VALUE, maxTimes, Integer.MAX_VALUE));
         return this;
     }
 
-    public BnfCom least(BnfCom parser, int minTimes) {
+    public BnfCom<T> least(BnfCom parser, int minTimes) {
         elements.add(new Times(parser, Integer.MAX_VALUE, Integer.MAX_VALUE, minTimes));
         return this;
     }
 
-    public BnfCom range(BnfCom parser, int min, int max) {
+    public BnfCom<T> range(BnfCom parser, int min, int max) {
         elements.add(new Times(parser, Integer.MAX_VALUE, max, min));
         return this;
     }
 
-    public <T extends AstNode> BnfCom consume(BnfCom bnfCom, Consumer<T> initial) {
+    public <E extends AstNode> BnfCom<T> consume(BnfCom bnfCom, Consumer<E> initial) {
         elements.add(new ConsumerCapture<>(bnfCom, initial));
         return this;
     }
 
-    public <T extends AstNode> BnfCom consume(Consumer<T> initial) {
-        BnfCom bnfCom = wrapper(this.factory);
+    @SuppressWarnings("unchecked")
+    public <E extends AstNode> BnfCom<T> consume(Consumer<E> initial) {
+        BnfCom<T> bnfCom = (BnfCom<T>) wrapper(fold);
         bnfCom.consume(this, initial);
         return bnfCom;
     }
 
-    public <T extends AstNode> BnfCom test(BnfCom bnfCom, Predicate<T> initial) {
+    public <E extends AstNode> BnfCom<T> test(BnfCom bnfCom, Predicate<E> initial) {
         elements.add(new PredicateCapture<>(bnfCom, initial, true));
         return this;
     }
 
-    public <T extends AstNode> BnfCom not(BnfCom bnfCom, Predicate<T> initial) {
+    public <E extends AstNode> BnfCom<T> not(BnfCom bnfCom, Predicate<E> initial) {
         elements.add(new PredicateCapture<>(bnfCom, initial, false));
         return this;
     }
 
-    public <T extends AstNode> BnfCom test(Predicate<T> initial) {
-        BnfCom bnfCom = wrapper(this.factory);
+    public <E extends AstNode> BnfCom<T> test(Predicate<E> initial) {
+        BnfCom<T> bnfCom = wrapper(this.constructor);
         bnfCom.test(this, initial);
         return bnfCom;
     }
 
-    public <T extends AstNode> BnfCom not(Predicate<T> initial) {
-        BnfCom bnfCom = wrapper(this.factory);
+    public <E extends AstNode> BnfCom<T> not(Predicate<E> initial) {
+        BnfCom<T> bnfCom = wrapper(this.constructor);
         bnfCom.not(this, initial);
         return bnfCom;
     }
 
-    public <T extends AstNode> BnfCom collect(BnfCom parser, List<T> collection) {
+    public <E extends AstNode> BnfCom<T> collect(BnfCom parser, List<E> collection) {
         elements.add(new CollectCapture<>(parser, collection));
         return this;
     }
 
-    public <T extends AstNode> BnfCom collect(List<T> collection) {
-        BnfCom bnfCom = wrapper(this.factory);
+    public <E extends AstNode> BnfCom<T> collect(List<E> collection) {
+        BnfCom<T> bnfCom = wrapper(this.constructor);
         bnfCom.collect(this, collection);
         return bnfCom;
     }
@@ -366,7 +367,7 @@ public final class BnfCom {
 
     @Override
     public boolean equals(Object obj) {
-        BnfCom bnfCom = (BnfCom) obj;
+        BnfCom<T> bnfCom = (BnfCom<T>) obj;
         List<Element> objElements = bnfCom.elements;
 
         if (elements.size() != objElements.size()) {

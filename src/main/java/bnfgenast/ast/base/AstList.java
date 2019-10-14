@@ -5,6 +5,8 @@ package bnfgenast.ast.base;
 import java.util.Iterator;
 import java.util.List;
 
+import static bnfgenast.ast.token.Token.LIST;
+
 /**
  * AST List
  *
@@ -26,6 +28,11 @@ public class AstList extends AstNode {
             child.setParentNode(this);
             child.setChildIndex(i);
         }
+    }
+
+    public AstList(List<AstNode> children) {
+        super(LIST);
+        this.children = children;
     }
 
     @Override

@@ -6,15 +6,16 @@ import bnfgenast.ast.token.Token;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  * ID 类型的Token
  */
 public class IDToken extends AToken {
-    Set<String> reserved;
+    private Set<String> reserved;
 
-    public IDToken(Class<? extends AstLeaf> clazz, Set<String> reserved) {
-        super(clazz);
+    public IDToken(Function<Token, ? extends AstLeaf> factory, Set<String> reserved) {
+        super(factory);
         this.reserved = reserved != null ? reserved : new HashSet<>();
     }
 

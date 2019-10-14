@@ -69,7 +69,7 @@ public class AssertCaptureTest {
     @Test(expected = IllegalArgumentException.class)
     public void testAssertCaptureString() {
         // literal is "lfkdsk" but not accept "lfkdsk"
-        BnfCom string = rule().string(StringLiteral.class);
+        BnfCom string = rule().string(StringLiteral::new);
 
         BnfCom leaf = rule().ast(string)
                             .test(AstNode.class::isInstance)

@@ -6,7 +6,6 @@ import bnfgenast.ast.token.Token;
 import bnfgenast.bnf.BnfCom;
 import bnfgenast.bnf.base.Element;
 import bnfgenast.exception.ParseException;
-import bnfgenast.lexer.Lexer;
 import bnfgenast.utils.ObjectHelper;
 
 import java.util.List;

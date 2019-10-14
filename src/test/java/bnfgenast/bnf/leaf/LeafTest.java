@@ -15,7 +15,7 @@ public class LeafTest {
 
     @Test
     public void testLeaf() {
-        BnfCom string = rule().string(StringLiteral.class);
+        BnfCom string = rule().string(StringLiteral::new);
         BnfCom token = rule().then(string).token("==").then(string);
 
         Lexer lexer = new JustLexer("\"lfkdsk\" == \"123\"");

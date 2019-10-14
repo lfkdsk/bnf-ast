@@ -20,9 +20,9 @@ public class OrTreeTest {
 
     @Test
     public void testOrTree() {
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom string = rule().string(StringLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom string = rule().string(StringLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         // number | string | bool
         BnfCom primary = wrapper().or(number, string, bool);

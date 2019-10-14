@@ -16,7 +16,7 @@ public class OptionTreeTest {
 
     @Test
     public void testOption() {
-        BnfCom literal = rule().literal(StringLiteral.class, "lfkdsk");
+        BnfCom literal = rule().literal(StringLiteral::new, "lfkdsk");
         BnfCom option = rule().token("lfkdsk").option(rule().sep("(").ast(literal).sep(")"));
         Lexer lexer = new JustLexer("lfkdsk");
 
