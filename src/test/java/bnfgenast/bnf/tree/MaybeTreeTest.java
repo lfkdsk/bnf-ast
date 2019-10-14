@@ -15,7 +15,7 @@ public class MaybeTreeTest {
 
     @Test
     public void testMaybe() {
-        BnfCom literal = rule().literal(StringLiteral.class, "lfkdsk");
+        BnfCom literal = rule().literal(StringLiteral::new, "lfkdsk");
         BnfCom maybe = rule().token("lfkdsk").maybe(rule().sep("(").ast(literal).sep(")"));
         Lexer lexer = new JustLexer("lfkdsk");
 

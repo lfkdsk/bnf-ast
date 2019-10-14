@@ -42,8 +42,9 @@ public class Repeat extends Element {
                 nodes.add(node);
             }
 
-            if (onlyOne)
+            if (onlyOne) {
                 break;
+            }
         }
     }
 

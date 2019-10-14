@@ -20,10 +20,10 @@ public class TokenTest {
 
     @Test
     public void testTokens() {
-        BnfCom number = rule().number(NumberLiteral.class);
-        BnfCom id = rule().identifier(IDLiteral.class, reversed());
-        BnfCom string = rule().string(StringLiteral.class);
-        BnfCom bool = rule().bool(BoolLiteral.class);
+        BnfCom number = rule().number(NumberLiteral::new);
+        BnfCom id = rule().identifier(IDLiteral::new, reversed());
+        BnfCom string = rule().string(StringLiteral::new);
+        BnfCom bool = rule().bool(BoolLiteral::new);
 
         BnfCom primary = wrapper().or(number, id, string, bool);
 

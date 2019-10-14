@@ -3,17 +3,18 @@ package bnfgenast.bnf.base;
 
 import bnfgenast.ast.base.AstNode;
 
+import java.util.List;
+import java.util.function.Function;
+
 public final class Precedence {
     public final int value;
     public final boolean leftAssoc;
-    public final Class<? extends AstNode> clazz;
-    public final Factory factory;
+    public final Function<List<AstNode>, ? extends AstNode> factory;
 
     Precedence(int value, boolean leftAssoc,
-               Class<? extends AstNode> clazz) {
+               Function<List<AstNode>, ? extends AstNode> factory) {
         this.value = value;
         this.leftAssoc = leftAssoc;
-        this.clazz = clazz;
-        this.factory = Factory.getForAstList(clazz);
+        this.factory = factory;
     }
 }
