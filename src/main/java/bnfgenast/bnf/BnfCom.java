@@ -137,39 +137,39 @@ public final class BnfCom<T extends AstNode> {
     // 添加识别各种Token的方法
     ///////////////////////////////////////////////////////////////////////////
 
-    public BnfCom number() {
+    public BnfCom<T> number() {
         return number(AstLeaf::new);
     }
 
-    public BnfCom number(AstLeafCreator<? extends AstLeaf> factory) {
+    public BnfCom<T> number(AstLeafCreator<? extends AstLeaf> factory) {
         elements.add(new NumToken(factory));
         return this;
     }
 
-    public BnfCom identifier(Set<String> reserved) {
+    public BnfCom<T> identifier(Set<String> reserved) {
         return identifier(AstLeaf::new, reserved);
     }
 
-    public BnfCom identifier(AstLeafCreator<? extends AstLeaf> factory,
-                             Set<String> reserved) {
+    public BnfCom<T> identifier(AstLeafCreator<? extends AstLeaf> factory,
+                                Set<String> reserved) {
         elements.add(new IDToken(factory, reserved));
         return this;
     }
 
-    public BnfCom string() {
+    public BnfCom<T> string() {
         return string(AstLeaf::new);
     }
 
-    public BnfCom string(AstLeafCreator<? extends AstLeaf> factory) {
+    public BnfCom<T> string(AstLeafCreator<? extends AstLeaf> factory) {
         elements.add(new StrToken(factory));
         return this;
     }
 
-    public BnfCom bool() {
+    public BnfCom<T> bool() {
         return bool(AstLeaf::new);
     }
 
-    public BnfCom bool(Function<Token, ? extends AstLeaf> factory) {
+    public BnfCom<T> bool(Function<Token, ? extends AstLeaf> factory) {
         elements.add(new BoolToken(factory));
         return this;
     }
@@ -195,7 +195,7 @@ public final class BnfCom<T extends AstNode> {
      * @param pat 符号
      * @return 这种格式的符号(跳
      */
-    public BnfCom sep(String... pat) {
+    public BnfCom<T> sep(String... pat) {
         elements.add(new Skip(pat));
         return this;
     }
@@ -231,7 +231,7 @@ public final class BnfCom<T extends AstNode> {
         return this;
     }
 
-    public BnfCom maybe(String token) {
+    public BnfCom<T> maybe(String token) {
         elements.add(new SkipOR(token));
         return this;
     }
@@ -242,7 +242,7 @@ public final class BnfCom<T extends AstNode> {
      * @param parser BNF
      * @return BNF
      */
-    public BnfCom option(BnfCom parser) {
+    public BnfCom<T> option(BnfCom parser) {
         elements.add(new Repeat(parser, true));
         return this;
     }

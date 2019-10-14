@@ -1,25 +1,46 @@
 apply plugin: 'java'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 group = 'lfkdsk'
-version = 'v3.16'
+version = '3.16'
 
 description = """"""
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 tasks.withType(JavaCompile) {
-	options.encoding = 'UTF-8'
+    options.encoding = 'UTF-8'
 }
-
 
 
 repositories {
-        
-     maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "http://repo.maven.apache.org/maven2" }
 }
+
 dependencies {
-    compile group: 'org.projectlombok', name: 'lombok', version:'1.16.12'
-    compile group: 'org.jetbrains', name: 'annotations', version:'13.0'
-    compile group: 'junit', name: 'junit', version:'4.12'
+    compile group: 'org.projectlombok', name: 'lombok', version: '1.16.12'
+    compile group: 'org.jetbrains', name: 'annotations', version: '13.0'
+    compile group: 'junit', name: 'junit', version: '4.12'
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "Github"
+            url = uri("https://maven.pkg.github.com/lfkdsk/bnf-ast")
+            credentials {
+                username = findProperty("github.username")
+                password = findProperty("github.token")
+            }
+        }
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.lfkdsk'
+            artifactId = 'bnf-ast'
+            version = '3.18'
+            from components.java
+        }
+    }
 }

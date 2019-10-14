@@ -145,3 +145,4 @@ target/
 sample/.gradle/*
 sample/gradle/*
 gradle/*
+gradle.properties
