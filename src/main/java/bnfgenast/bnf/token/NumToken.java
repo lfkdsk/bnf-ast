@@ -2,7 +2,9 @@ package bnfgenast.bnf.token;
 
 
 import bnfgenast.ast.base.AstLeaf;
+import bnfgenast.ast.base.AstNode;
 import bnfgenast.ast.token.Token;
+import bnfgenast.bnf.base.AstLeafCreator;
 
 import java.util.function.Function;
 
@@ -11,7 +13,7 @@ import java.util.function.Function;
  */
 public class NumToken extends AToken {
 
-    public NumToken(Function<Token, ? extends AstLeaf> factory) {
+    public NumToken(AstLeafCreator<? extends AstNode> factory) {
         super(factory);
     }
 

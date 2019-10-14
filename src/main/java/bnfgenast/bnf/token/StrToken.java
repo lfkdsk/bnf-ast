@@ -1,6 +1,7 @@
 package bnfgenast.bnf.token;
 
 import bnfgenast.ast.base.AstLeaf;
+import bnfgenast.ast.base.AstNode;
 import bnfgenast.ast.token.Token;
 
 import java.util.function.Function;
@@ -10,7 +11,7 @@ import java.util.function.Function;
  */
 public class StrToken extends AToken {
 
-    public StrToken(Function<Token, ? extends AstLeaf> factory) {
+    public StrToken(Function<Token, ? extends AstNode> factory) {
         super(factory);
     }
 
