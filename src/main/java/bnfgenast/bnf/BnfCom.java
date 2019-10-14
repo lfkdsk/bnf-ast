@@ -42,20 +42,29 @@ public final class BnfCom<T extends AstNode> {
      * 存储全部的BNF表达式
      */
     private List<Element> elements;
-    private AstListCreator<T> constructor;
+    private AstListCreator<T> listCreator;
+    private AstLeafCreator<T> leafCreator;
 
     @Getter
     private String ruleName;
 
     protected BnfCom(BnfCom<T> parser) {
         this.elements = parser.elements;
-        this.constructor = parser.constructor;
+        this.listCreator = parser.listCreator;
+        this.leafCreator = parser.leafCreator;
     }
 
     public BnfCom(AstListCreator<T> constructor) {
-        this.constructor = constructor;
+        this.listCreator = constructor;
         this.elements = new ArrayList<>();
     }
+
+    public BnfCom(AstLeafCreator<T> constructor) {
+        this.leafCreator = constructor;
+        this.listCreator = (children) -> (T) children.get(0);
+        this.elements = new ArrayList<>();
+    }
+
 
     /**
      * 分析处理
@@ -69,7 +78,7 @@ public final class BnfCom<T extends AstNode> {
         for (Element e : elements) {
             e.parse(lexer, results);
         }
-        return constructor.apply(results);
+        return listCreator.apply(results);
     }
 
 
@@ -90,6 +99,10 @@ public final class BnfCom<T extends AstNode> {
         }
     };
 
+    private AstLeafCreator<? extends AstNode> leaf() {
+        return this.leafCreator == null ? AstLeaf::new : this.leafCreator;
+    }
+
     /**
      * 初始化 / 新定义一个一条产生式
      *
@@ -97,6 +110,10 @@ public final class BnfCom<T extends AstNode> {
      */
     public static BnfCom<AstNode> rule() {
         return rule(fold);
+    }
+
+    public static <E extends AstNode> BnfCom<E> leaf(AstLeafCreator<E> constructor) {
+        return new BnfCom<>(constructor);
     }
 
     /**
@@ -129,7 +146,7 @@ public final class BnfCom<T extends AstNode> {
 
     public BnfCom<T> of(BnfCom<T> origin) {
         this.elements = new ArrayList<>(origin.elements);
-        this.constructor = origin.constructor;
+        this.listCreator = origin.listCreator;
         return this;
     }
 
@@ -138,38 +155,38 @@ public final class BnfCom<T extends AstNode> {
     ///////////////////////////////////////////////////////////////////////////
 
     public BnfCom<T> number() {
-        return number(AstLeaf::new);
+        return number(leaf());
     }
 
-    public BnfCom<T> number(AstLeafCreator<? extends AstLeaf> factory) {
+    public BnfCom<T> number(AstLeafCreator<? extends AstNode> factory) {
         elements.add(new NumToken(factory));
         return this;
     }
 
     public BnfCom<T> identifier(Set<String> reserved) {
-        return identifier(AstLeaf::new, reserved);
+        return identifier(leaf(), reserved);
     }
 
-    public BnfCom<T> identifier(AstLeafCreator<? extends AstLeaf> factory,
+    public BnfCom<T> identifier(AstLeafCreator<? extends AstNode> factory,
                                 Set<String> reserved) {
         elements.add(new IDToken(factory, reserved));
         return this;
     }
 
     public BnfCom<T> string() {
-        return string(AstLeaf::new);
+        return string(leaf());
     }
 
-    public BnfCom<T> string(AstLeafCreator<? extends AstLeaf> factory) {
+    public BnfCom<T> string(AstLeafCreator<? extends AstNode> factory) {
         elements.add(new StrToken(factory));
         return this;
     }
 
     public BnfCom<T> bool() {
-        return bool(AstLeaf::new);
+        return bool(leaf());
     }
 
-    public BnfCom<T> bool(Function<Token, ? extends AstLeaf> factory) {
+    public BnfCom<T> bool(Function<Token, ? extends AstNode> factory) {
         elements.add(new BoolToken(factory));
         return this;
     }
@@ -286,7 +303,7 @@ public final class BnfCom<T extends AstNode> {
         return this;
     }
 
-    public BnfCom<T> literal(Function<Token, ? extends AstLeaf> factory, String literal) {
+    public BnfCom<T> literal(Function<Token, ? extends AstNode> factory, String literal) {
         elements.add(new StableStringToken(factory, literal));
         return this;
     }
@@ -339,13 +356,13 @@ public final class BnfCom<T extends AstNode> {
     }
 
     public <E extends AstNode> BnfCom<T> test(Predicate<E> initial) {
-        BnfCom<T> bnfCom = wrapper(this.constructor);
+        BnfCom<T> bnfCom = wrapper(this.listCreator);
         bnfCom.test(this, initial);
         return bnfCom;
     }
 
     public <E extends AstNode> BnfCom<T> not(Predicate<E> initial) {
-        BnfCom<T> bnfCom = wrapper(this.constructor);
+        BnfCom<T> bnfCom = wrapper(this.listCreator);
         bnfCom.not(this, initial);
         return bnfCom;
     }
@@ -356,7 +373,7 @@ public final class BnfCom<T extends AstNode> {
     }
 
     public <E extends AstNode> BnfCom<T> collect(List<E> collection) {
-        BnfCom<T> bnfCom = wrapper(this.constructor);
+        BnfCom<T> bnfCom = wrapper(this.listCreator);
         bnfCom.collect(this, collection);
         return bnfCom;
     }

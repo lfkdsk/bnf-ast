@@ -16,11 +16,12 @@ package bnfgenast.bnf.base;/*
  */
 
 import bnfgenast.ast.base.AstLeaf;
+import bnfgenast.ast.base.AstNode;
 import bnfgenast.ast.token.Token;
 
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface AstLeafCreator<T extends AstLeaf> extends Function<Token, T> {
+public interface AstLeafCreator<T extends AstNode> extends Function<Token, T> {
 
 }

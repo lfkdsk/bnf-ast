@@ -17,9 +17,9 @@ import java.util.function.Function;
 public abstract class AToken extends Element {
 
     //    private Factory factory;
-    private Function<Token, ? extends AstLeaf> factory;
+    private Function<Token, ? extends AstNode> factory;
 
-    public AToken(Function<Token, ? extends AstLeaf> factory) {
+    public AToken(Function<Token, ? extends AstNode> factory) {
         if (factory == null) {
             this.factory = AstLeaf::new;
         }
